@@ -1,4 +1,4 @@
-import adventure.lib.living
+from adventure.lib.living import Living
 
 
 class Player(Living):

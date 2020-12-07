@@ -1,4 +1,4 @@
-import adventure.lib.room
+from adventure.lib.room import Room
 
 
 def test_import():
