@@ -6,7 +6,6 @@ class Base:
         self.inventory = []
         self.description = None
         self.ids = []
-
     def move(self, other):
         """
         this method is for moving objects into other objects.
