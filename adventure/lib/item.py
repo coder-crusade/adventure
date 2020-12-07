@@ -1,4 +1,4 @@
-import adventure.lib.base_obj
+from adventure.lib.base_obj import Base
 
 
 class Item(Base):
