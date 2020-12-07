@@ -1,6 +1,10 @@
-from adventure.lib.base_obj import Base 
+from adventure.lib.base_obj import Base
+
 
 class Room(Base):
 
     def __init__(self):
-        pass
+        self.exits = {}
+
+    def add_exit(self, direction, room):
+        self.exits[direction] = room
