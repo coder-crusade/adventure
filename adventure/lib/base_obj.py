@@ -6,6 +6,7 @@ class Base:
         self.inventory = []
         self.description = None
         self.ids = []
+        self.name = None
 
     def move(self, other):
         """
