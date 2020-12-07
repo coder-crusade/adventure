@@ -1,4 +1,3 @@
-
 class Base:
 
     def __init__(self):
@@ -7,11 +6,19 @@ class Base:
         self.description = None
         self.ids = []
 
-    def move(self, other):
+    def move(self, destination):
         """
         this method is for moving objects into other objects.
         """
-        pass
+        # remove self from environment inventory list
+        if self.environment:
+            self.environment.inventory.remove(self)
+
+        # set environment as destination
+        self.environment = destination
+
+        # add self to new environment inventory
+        self.environment.inventory.append(self)
 
     def __str__(self):
         """
