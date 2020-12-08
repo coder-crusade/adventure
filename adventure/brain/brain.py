@@ -5,16 +5,16 @@ from adventure.lib.room import Room
 from adventure.monsters.rat import Rat
 from adventure.items.key import Key
 
+debug = {
+    'action' : True,
+    'room-movement' : True,
+}
+
 def GameLogic():
 
     # probably should move this into the player object
-    def move_player(direction):
-        destination = player.environment.exits[direction]
-        if destination:
-            print(f'You walk {direction}')
-            player.move(destination)
-        else
-            print("You hit wall")
+    def move_player(destination):
+        player.move(destination)
 
     player = Player()
 
@@ -23,7 +23,7 @@ def GameLogic():
         room2 = Room()
         room3 = Room()
 
-        #map looks llike this:
+        # map looks like this:
         #
         #  [ room1 ] - [ room2 ] - [ room3 ]
         #     ^            ^
@@ -46,8 +46,8 @@ def GameLogic():
         rat.move(room2)
         key.move(room2)
 
+    # instantiate level1
     level1(player)
-
 
     prompt_string = '> '
     while True:
@@ -55,20 +55,34 @@ def GameLogic():
 
         action = action.strip().lower()
 
-        verb = action.split(" ")[0:1]
+        verb = action.split(" ")[0:1][0]
         noun = action.split(" ")[1:]
 
+        if debug['action']:
+            print('action:', action)
+            print('verb:', verb)
+            print('noun:', noun)
+
         # handle movement
-        if verb in ["north", 'n']:
-            move_player(player.environment.exits['north'])
-            
-        elif verb in ['south', 's']:
-            move_player(player.environment.exits['south'])
 
-        elif verb in ['east', 'e']:
-            move_player(player.environment.exits['east'])
+        # expand short directions into longer directions
+        if verb == 'n':
+            verb = 'north'
+        elif verb == 's':
+            verb = 'south'
+        elif verb == 'e':
+            verb = 'east'
+        elif verb == 'w':
+            verb = 'west'
 
-        elif verb in ['west', 'w']:
-            move_player(player.environment.exits['west'])
+        if verb in ['north', 'south', 'east', 'west']:
+            if verb in player.environment.exits:
+                print(f'You walk {verb}')
+                move_player(player.environment.exits[verb])
+            else:
+                print("You hit wall")
+        else:
+            print(f"You cannot {verb}. (yet)")
 
-    
+
+GameLogic()
