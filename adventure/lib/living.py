@@ -8,14 +8,18 @@ class Living(Base):
         super().__init__()
         self.health = 10
         self.max_health = 10
-        self.attack_value = 0
+        self.attack_value = 1
         
     def hit(self, attack_value):
         '''
         method reducing health points of objects 
         '''
         self.health = self.health - attack_value 
-        return self.health
+        #if our health is less than 1, then death
+        if self.health <= 0:
+            print(f'{self.name} has died!')
+            self.environment.inventory.remove(self)
+        return self.attack_value
 
     def heal(self, num):
         '''
