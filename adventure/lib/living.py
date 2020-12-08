@@ -5,6 +5,7 @@ class Living(Base):
         '''
         Class holding init status of monster and player (dead) 
         '''
+        super().__init__()
         self.health = 10
         self.max_health = 10
         self.attack_value = 0
