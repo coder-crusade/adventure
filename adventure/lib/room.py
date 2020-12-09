@@ -9,3 +9,8 @@ class Room(Base):
 
     def add_exit(self, direction, room):
         self.exits[direction] = room
+
+    def __repr__(self):
+        if len(self.inventory):
+            return ' X '
+        return ' . '
