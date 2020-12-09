@@ -36,4 +36,4 @@ class Base:
     
     def is_hidden(self):
         return self.hidden
-           
+        

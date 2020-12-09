@@ -75,9 +75,27 @@ def GameLogic():
         # active commands, such as 'strike' or movement, that allow monsters to react
         # passive commands, such as 'look', that do not allow monsters to react
         if(action_resolved):
-            continue
+            continue   
         else:
             print(f"You cannot {verb}. (yet)")
 
+#         elif verb == "strike":
+#             for thing in player.environment.inventory:
+
+#                 if thing.name.lower() != noun:
+#                     continue 
+
+#                 if not thing.is_alive:
+#                     return thing.is_corpse()
+
+#                 print(f"You hit the {thing.name} for {player.attack_value} damage!")
+#                 damage = thing.hit(player.attack_value)
+
+#                 if thing.health > 0:
+#                     damage = player.hit(thing.attack_value)
+#                     print(f"The {thing.name} hits you for {damage} damage!")
+#                     if thing.health > 0:
+#                         print(f"{thing.name} snarls at you!")
+#                         print("Hurry! Strike it again!")
 
 GameLogic()
