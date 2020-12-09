@@ -86,10 +86,16 @@ def GameLogic():
 
         elif verb == "strike":
             for thing in player.environment.inventory:
+
                 if thing.name.lower() != noun:
                     continue 
+
+                if not thing.is_alive:
+                    return thing.is_corpse()
+
                 print(f"You hit the {thing.name} for {player.attack_value} damage!")
                 damage = thing.hit(player.attack_value)
+
                 if thing.health > 0:
                     damage = player.hit(thing.attack_value)
                     print(f"The {thing.name} hits you for {damage} damage!")
