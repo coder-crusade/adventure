@@ -1,6 +1,9 @@
 from adventure.lib.player import Player
 from adventure.lib.room import Room
 
+# testing
+from adventure.lib.map import connect_rooms, dungeon_maker, show_map2
+
 # level 1 imports
 from adventure.monsters.rat import Rat
 from adventure.items.key import Key
@@ -10,6 +13,7 @@ debug = {
     'room-movement' : True,
     'combat' : True
 }
+
 
 def GameLogic():
 
@@ -48,10 +52,15 @@ def GameLogic():
         key.move(room2)
 
     # instantiate level1
-    level1(player)
+    # level1(player)
+
+    seths_map = dungeon_maker(12, 12)
+    connect_rooms(seths_map)
+    player.move(seths_map[0][0])
 
     # prompt_string = 
     while True:
+        show_map2(seths_map)
 
         action = input(f'Health {player.health}/{player.max_health} > ')
 
@@ -108,9 +117,6 @@ def GameLogic():
 
         else:
             print(f"You cannot {verb}. (yet)")
-
-
-
 
 
 GameLogic()
