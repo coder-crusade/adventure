@@ -65,13 +65,25 @@ def dungeon_maker(width, height):
         possible_directions = []
 
         if row - 1 >= 0:
-            possible_directions.append('north')
+            if not map[row][col]:
+                possible_directions.extend(['north'] * 5)
+            else:
+                possible_directions.append('north')
         if row + 1 < len(map):
-            possible_directions.append('south')
+            if not map[row][col]:
+                possible_directions.extend(['south'] * 10)
+            else:
+                possible_directions.append('south')
         if col - 1 >= 0:
-            possible_directions.append('west')
+            if not map[row][col]:
+                possible_directions.extend(['west'] * 5)
+            else:
+                possible_directions.append('west')
         if col + 1 < len(map[row]):
-            possible_directions.append('east')
+            if not map[row][col]:
+                possible_directions.extend(['east'] * 10)
+            else:
+                possible_directions.append('east')
 
         random_direction = random.choice(possible_directions)
 
@@ -86,7 +98,7 @@ def dungeon_maker(width, height):
             col -= 1
         crawl(row, col, distance-1)
     
-    crawl(0,0,100)
+    crawl(0,0,150)
 
     # for row in range(height):
     #     for col in range(width):
@@ -99,6 +111,9 @@ def show_map2(map):
     for row in range(len(map)):
         output = ""
         for col in range(len(map[row])):
-            output += repr(map[row][col])
+            if map[row][col]:
+                output += repr(map[row][col])
+            else:
+                output += '[ ]'
         print(output)
 
