@@ -23,6 +23,9 @@ def connect_rooms(map):
     for row in range(len(map)):
         for col in range(len(map[row])):
             current = map[row][col]
+            if not current:
+                continue
+
             north = None
             south = None
             east = None
@@ -73,23 +76,23 @@ def dungeon_maker(width, height):
         random_direction = random.choice(possible_directions)
 
         if random_direction == 'north':
-            col -= 1
+            row -= 1
         elif random_direction == 'south':
-            col += 1
-        elif random_direction == 'east':
             row += 1
+        elif random_direction == 'east':
+            col += 1
         # random_direction == 'west':
         else:
-            row -= 1
-        crawl(row, col, distance -1)
+            col -= 1
+        crawl(row, col, distance-1)
     
-    crawl(0,0,20)
+    crawl(0,0,100)
 
     # for row in range(height):
     #     for col in range(width):
     #         room = Room()
     #         map[row][col] = room
-    print(map)
+    return map
 
 
 def show_map2(map):
