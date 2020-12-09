@@ -1,4 +1,6 @@
 from adventure.lib.base_obj import Base
+from adventure.lib.room import Room
+from adventure.items.key import Key
 class Living(Base):
 
     def __init__(self):
@@ -18,6 +20,17 @@ class Living(Base):
         #if our health is less than 1, then death
         if self.health <= 0:
             print(f'{self.name} has died!')
+            search_prompt = input(f"Search {self.name}? y/n? > ")
+            if search_prompt == "y":
+                key = Key()
+                key.move(self.inventory)
+                Room.search()
+            if search_prompt == 'n':
+                print("Are you sure?")
+                return search_prompt
+            else:
+                print("That's not a valid response")
+                return search_prompt
         return self.attack_value
 
     def heal(self, num):
