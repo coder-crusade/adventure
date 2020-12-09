@@ -18,7 +18,6 @@ class Living(Base):
         #if our health is less than 1, then death
         if self.health <= 0:
             print(f'{self.name} has died!')
-            self.environment.inventory.remove(self)
         return self.attack_value
 
     def heal(self, num):
@@ -31,6 +30,8 @@ class Living(Base):
             else:
                 self.health += num
     
+    #the property decorator is making is_alive behave as if it were a property of the Living class - contributed by Skyler Burger
+    @property 
     def is_alive(self):
         '''
         method that check if objects is alive
@@ -40,3 +41,5 @@ class Living(Base):
             return False
         return True
 
+    def is_corpse(self):
+        print(f"Alright, that\'s enough! You already killed the {self.name}!")
