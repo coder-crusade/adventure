@@ -108,6 +108,9 @@ def GameLogic():
                 if thing.health > 0:
                     damage = player.hit(thing.attack_value)
                     print(f"The {thing.name} hits you for {damage} damage!")
+                    if thing.health > 0:
+                        print(f"{thing.name} snarls at you!")
+                        print("Hurry! Strike it again!")
 
                 if debug['combat']:
                     print(f'Player Health: {player.health}/{player.max_health}')

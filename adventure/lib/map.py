@@ -1,4 +1,5 @@
 from adventure.lib.room import Room
+from adventure.monsters.rat import Rat
 import random
 
 map2 = [
@@ -57,6 +58,8 @@ def dungeon_maker(width, height):
 
     def crawl(row, col, distance):
         if not distance:
+            rat = Rat()
+            rat.move(map[row][col])
             return
 
         if not map[row][col]:
