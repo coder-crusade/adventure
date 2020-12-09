@@ -17,6 +17,7 @@ class Room(Base):
         '''
         self.exits[direction] = room
     
+
     def visible_look(self):
         '''
         method that return a string of all the object that
@@ -28,6 +29,7 @@ class Room(Base):
                 visible_object_found += obj.name+', '
         return f"{visible_object_found}are the visible items found in the room"
 
+      
     def search(self):
         '''
         method that return a string of all the object that
@@ -40,3 +42,8 @@ class Room(Base):
                 obj.hidden = False
         return f"{invisible_object_found}are the hidden items found in the room"
     
+
+    def __repr__(self):
+        if len(self.inventory):
+            return ' X '
+        return ' . '

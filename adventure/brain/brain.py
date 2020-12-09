@@ -1,6 +1,9 @@
 from adventure.lib.player import Player
 from adventure.lib.room import Room
 
+# testing
+from adventure.lib.map import connect_rooms, dungeon_maker, show_map2
+
 # level 1 imports
 from adventure.monsters.rat import Rat
 from adventure.items.key import Key
@@ -8,7 +11,9 @@ from adventure.items.key import Key
 debug = {
     'action' : True,
     'room-movement' : True,
+    'combat' : True
 }
+
 
 def GameLogic():
 
@@ -47,16 +52,22 @@ def GameLogic():
         key.move(room2)
 
     # instantiate level1
-    level1(player)
+    # level1(player)
 
-    prompt_string = '> '
+    seths_map = dungeon_maker(12, 12)
+    connect_rooms(seths_map)
+    player.move(seths_map[0][0])
+
+    # prompt_string = 
     while True:
-        action = input(prompt_string)
+        show_map2(seths_map)
+
+        action = input(f'Health {player.health}/{player.max_health} > ')
 
         action = action.strip().lower()
 
         verb = action.split(" ")[0:1][0]
-        noun = action.split(" ")[1:]
+        noun = " ".join(action.split(" ")[1:])
 
         if debug['action']:
             print('action:', action)
@@ -81,6 +92,29 @@ def GameLogic():
                 move_player(player.environment.exits[verb])
             else:
                 print("You hit wall")
+
+        elif verb == "strike":
+            for thing in player.environment.inventory:
+
+                if thing.name.lower() != noun:
+                    continue 
+
+                if not thing.is_alive:
+                    return thing.is_corpse()
+
+                print(f"You hit the {thing.name} for {player.attack_value} damage!")
+                damage = thing.hit(player.attack_value)
+
+                if thing.health > 0:
+                    damage = player.hit(thing.attack_value)
+                    print(f"The {thing.name} hits you for {damage} damage!")
+
+                if debug['combat']:
+                    print(f'Player Health: {player.health}/{player.max_health}')
+                    print(f'Opponents Health: {thing.health}/{thing.max_health}')
+
+                break 
+
         else:
             print(f"You cannot {verb}. (yet)")
 

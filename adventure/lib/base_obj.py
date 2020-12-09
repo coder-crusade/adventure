@@ -26,7 +26,7 @@ class Base:
         """
         this method is for description of space
         """
-        return self.description
+        return self.name 
 
     def contains_id(self):
         """
