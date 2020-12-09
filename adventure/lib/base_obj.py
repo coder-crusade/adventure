@@ -6,6 +6,7 @@ class Base:
         self.description = None
         self.ids = []
         self.name = None
+        self.hidden = False
 
     def move(self, destination):
         """
@@ -25,10 +26,14 @@ class Base:
         """
         this method is for description of space
         """
-        pass
+        return self.description
 
     def contains_id(self):
         """
         this method contains lists of ids for comparing the input:
         """
         pass
+    
+    def is_hidden(self):
+        return self.hidden
+           
