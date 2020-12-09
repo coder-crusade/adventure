@@ -35,4 +35,3 @@ class Living(Base):
         if self.health <= 0:
             return False
         return True
-
