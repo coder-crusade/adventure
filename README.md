@@ -6,4 +6,4 @@
 
 # Domain Model
 ![img](dev_notes/domain_model.png)
-- Our team created this Domain Model to visualize the connections between the different objects in the game.
+- Our team created this Domain Model to visualize the connections between the different objects in the game...
