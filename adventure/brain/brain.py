@@ -10,16 +10,11 @@ from adventure.items.key import Key
 
 debug = {
     'action' : True,
-    'room-movement' : True,
-    'combat' : True
+    'combat' : True,
 }
 
 
 def GameLogic():
-
-    # probably should move this into the player object
-    def move_player(destination):
-        player.move(destination)
 
     player = Player()
 
@@ -58,7 +53,6 @@ def GameLogic():
     connect_rooms(seths_map)
     player.move(seths_map[0][0])
 
-    # prompt_string = 
     while True:
         show_map2(seths_map)
 
@@ -67,59 +61,41 @@ def GameLogic():
         action = action.strip().lower()
 
         verb = action.split(" ")[0:1][0]
-        noun = " ".join(action.split(" ")[1:])
+        args = " ".join(action.split(" ")[1:])
 
         if debug['action']:
             print('action:', action)
             print('verb:', verb)
-            print('noun:', noun)
+            print('args:', args)
 
-        # handle movement
-
-        # expand short directions into longer directions
-        if verb == 'n':
-            verb = 'north'
-        elif verb == 's':
-            verb = 'south'
-        elif verb == 'e':
-            verb = 'east'
-        elif verb == 'w':
-            verb = 'west'
-
-        if verb in ['north', 'south', 'east', 'west']:
-            if verb in player.environment.exits:
-                print(f'You walk {verb}')
-                move_player(player.environment.exits[verb])
-            else:
-                print("You hit wall")
-
-        elif verb == "strike":
-            for thing in player.environment.inventory:
-
-                if thing.name.lower() != noun:
-                    continue 
-
-                if not thing.is_alive:
-                    return thing.is_corpse()
-
-                print(f"You hit the {thing.name} for {player.attack_value} damage!")
-                damage = thing.hit(player.attack_value)
-
-                if thing.health > 0:
-                    damage = player.hit(thing.attack_value)
-                    print(f"The {thing.name} hits you for {damage} damage!")
-                    if thing.health > 0:
-                        print(f"{thing.name} snarls at you!")
-                        print("Hurry! Strike it again!")
-
-                if debug['combat']:
-                    print(f'Player Health: {player.health}/{player.max_health}')
-                    print(f'Opponents Health: {thing.health}/{thing.max_health}')
-
-                break 
-
+        # actions are hanled in the player object
+        action_resolved = player.action(verb, args)
+        # TODO: allow more than True/False resolutions, so that we can
+        # have varying levels of commands:
+        # active commands, such as 'strike' or movement, that allow monsters to react
+        # passive commands, such as 'look', that do not allow monsters to react
+        if(action_resolved):
+            continue   
         else:
             print(f"You cannot {verb}. (yet)")
 
+#         elif verb == "strike":
+#             for thing in player.environment.inventory:
+
+#                 if thing.name.lower() != noun:
+#                     continue 
+
+#                 if not thing.is_alive:
+#                     return thing.is_corpse()
+
+#                 print(f"You hit the {thing.name} for {player.attack_value} damage!")
+#                 damage = thing.hit(player.attack_value)
+
+#                 if thing.health > 0:
+#                     damage = player.hit(thing.attack_value)
+#                     print(f"The {thing.name} hits you for {damage} damage!")
+#                     if thing.health > 0:
+#                         print(f"{thing.name} snarls at you!")
+#                         print("Hurry! Strike it again!")
 
 GameLogic()
