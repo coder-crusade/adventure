@@ -8,6 +8,7 @@ class Base:
         self.name = None
         self.hidden = False
         self.actions = {}
+        self.my_map_string = "   "
 
     def move(self, destination):
         """
@@ -27,7 +28,10 @@ class Base:
         """
         this method is for description of space
         """
-        return self.name 
+        return self.name
+    
+    def map_string(self):
+        return self.my_map_string
 
     def contains_id(self):
         """

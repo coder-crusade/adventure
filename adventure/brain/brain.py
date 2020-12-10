@@ -2,16 +2,13 @@ from adventure.lib.player import Player
 from adventure.lib.room import Room
 
 # testing
-from adventure.lib.map import connect_rooms, dungeon_maker, show_map
+from adventure.lib.map import connect_rooms, dungeon_maker, show_map, randomly_place_player
 
 # level 1 imports
 from adventure.monsters.rat import Rat
 from adventure.items.key import Key
 
-debug = {
-    'action' : True,
-    'combat' : True,
-}
+from adventure.monsters.guard import Guard
 
 
 def GameLogic():
@@ -49,38 +46,51 @@ def GameLogic():
         return [[room1, room2, room3]]
 
     # instantiate level1
-    current_level = level1()
+    # current_level = level1()
 
-    # seths_map = dungeon_maker(12, 12)
-    # connect_rooms(seths_map)
-    # player.move(seths_map[0][0])
+    current_level = dungeon_maker(25, 25, 1)
+    connect_rooms(current_level)
+    randomly_place_player(current_level, player)
 
-    while True:
-        show_map(current_level, player)
-        
-        action = input(f'Health {player.health}/{player.max_health} > ')
+    guard = Guard()
+    monsters.append(guard)
+    randomly_place_player(current_level, guard)
+    guard = Guard()
+    monsters.append(guard)
+    randomly_place_player(current_level, guard)
+    guard = Guard()
+    monsters.append(guard)
+    randomly_place_player(current_level, guard)
 
-        action = action.strip().lower()
 
-        verb = action.split(" ")[0:1][0]
-        args = " ".join(action.split(" ")[1:])
+    def game_loop():
+        while True:
+            show_map(current_level, player)
+            
+            action = input(f'Health {player.health}/{player.max_health} > ')
 
-        if debug['action']:
-            print('action:', action)
-            print('verb:', verb)
-            print('args:', args)
+            action = action.strip().lower()
 
-        # actions are hanled in the player object
-        action_resolved = player.action(verb, args)
-        # TODO: allow more than True/False resolutions, so that we can
-        # have varying levels of commands:
-        # active commands, such as 'strike' or movement, that allow monsters to react
-        # passive commands, such as 'look', that do not allow monsters to react
-        if(action_resolved):
-            for monster in monsters:
-                monster.choose_action()
-            continue   
-        else:
-            print(f"You cannot {verb}. (yet)")
+            verb = action.split(" ")[0:1][0]
+            args = " ".join(action.split(" ")[1:])
+
+            # actions are hanled in the player object
+            action_resolved = player.action(verb, args)
+            # stretch: allow more than True/False resolutions, so that we can
+            # have varying levels of commands:
+            # active commands, such as 'strike' or movement, that allow monsters to react
+            # passive commands, such as 'look', that do not allow monsters to react
+            if(action_resolved):
+                for monster in monsters:
+                    monster.choose_action(player)
+
+                    if not player.is_alive:
+                        return
+                continue   
+            else:
+                print(f"You cannot {verb}.")
+
+    game_loop()
+    print('GAME OVER!')
 
 GameLogic()

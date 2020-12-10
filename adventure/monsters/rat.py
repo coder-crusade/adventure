@@ -11,6 +11,7 @@ class Rat(Monster):
         #Set the Rat's attack_value to 1 so that it takes the rat 10 strikes to kill the player
         self.attack_value = 1
         self.actions = {"search" : self.do_search_corpse}
+        self.my_map_string = "Rat"
 
     def respond_to_hit(self, player):
         if self.health:
@@ -20,6 +21,8 @@ class Rat(Monster):
         key = Key()
         key.move(self.environment)
         print(f"As you search the {self.name} you hear a {key.name} hit the floor! You should 'Collect' it!")
+        self.environment.inventory.remove(self)
+        self.environment = None
         return True
 
     def hit(self, attack_value):

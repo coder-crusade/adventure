@@ -1,6 +1,5 @@
 from adventure.lib.base_obj import Base
 
-
 class Room(Base):
 
     def __init__(self):
@@ -51,6 +50,6 @@ class Room(Base):
 
     def __repr__(self):
         if len(self.inventory):
-            return ' X '
+            return self.inventory[0].map_string()
         
         return ' . '

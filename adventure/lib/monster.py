@@ -7,7 +7,7 @@ class Monster(Living):
         super().__init__()
         self.angry = []
 
-    def choose_action(self):
+    def choose_action(self, player):
         if not self.is_alive:
             return
         if len(self.angry):
