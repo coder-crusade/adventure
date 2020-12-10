@@ -16,6 +16,7 @@ def test_rat_actions():
     expected = ['search']
     assert actual == expected
 
+# capsys contributed by Skyler Burger
 def test_respond_to_hit(capsys):
     rat = Rat()
     player = Player()
