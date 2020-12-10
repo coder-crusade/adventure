@@ -26,7 +26,33 @@ class Guard(Monster):
         random_room = self.environment.exits[random_direction]
         self.move(random_room)
 
-    def introduction(self):
-        def __init__():
-            super().__init__()
-            print_guard()
+    def introduce(self, player):
+        super().introduce(player)
+        self.print_guard()
+
+    def print_guard(self):
+        print(
+"""
+            A guard spots you!
+
+                   {}
+                  .--.
+                 /.--.\\
+                 |====|
+                 |`::`|  
+             .-;`\..../`;_.-^-._
+            /  |...::..|`   :   `|
+           |   /'''::''|   .:.   |
+           ;--'\   ::  |..:::::..|
+           <__> >._::_.| ':::::' |
+           |  |/   ^^  |   ':'   |
+           \::/|       \    :    /
+           |||\|        \   :   / 
+           ''' |___/\___|`-.:.-`
+                \_ || _/    `
+                <_ >< _>
+                |  ||  |
+                |  ||  |
+               _\.:||:./_
+              /____/\____\\
+""")

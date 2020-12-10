@@ -23,7 +23,7 @@ class Monster(Living):
                 print(f"The {self.name} hits {random_choice.name} for {self.attack_value} damage!")
 
     def introduce(self, player):
-        if introduced:
+        if self.introduced:
             return
         
-        introduced = True
+        self.introduced = True
