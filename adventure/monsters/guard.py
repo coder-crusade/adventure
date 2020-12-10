@@ -32,7 +32,7 @@ class Guard(Monster):
     def print_guard(self):
         print(
 """
-            A guard spots you!
+       A guard spots you, RUUUUNNNN!!!
 
                    {}
                   .--.
