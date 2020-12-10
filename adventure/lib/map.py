@@ -53,7 +53,7 @@ def connect_rooms(map):
                 current.add_exit('south', south)
 
 
-def randomly_place_player(map, player):
+def randomly_place(map, thing):
     possibilities = []
     for row in range(len(map)):
         for col in range(len(map[row])):
@@ -61,7 +61,7 @@ def randomly_place_player(map, player):
                 possibilities.append(map[row][col])
     print(possibilities)
 
-    player.move(random.choice(possibilities))
+    thing.move(random.choice(possibilities))
 
 
 def dungeon_maker(width, height, crawlers=0):

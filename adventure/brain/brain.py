@@ -2,12 +2,12 @@ from adventure.lib.player import Player
 from adventure.lib.room import Room
 
 # testing
-from adventure.lib.map import connect_rooms, dungeon_maker, show_map, randomly_place_player
+from adventure.lib.map import connect_rooms, dungeon_maker, show_map, randomly_place
 
-# level 1 imports
-from adventure.monsters.rat import Rat
+# level imports
 from adventure.items.key import Key
-
+from adventure.items.door import Door
+from adventure.monsters.rat import Rat
 from adventure.monsters.guard import Guard
 
 
@@ -50,17 +50,20 @@ def GameLogic():
 
     current_level = dungeon_maker(25, 25, 1)
     connect_rooms(current_level)
-    randomly_place_player(current_level, player)
+    randomly_place(current_level, player)
+
+    door = Door()
+    randomly_place(current_level, door)
 
     guard = Guard()
     monsters.append(guard)
-    randomly_place_player(current_level, guard)
+    randomly_place(current_level, guard)
     guard = Guard()
     monsters.append(guard)
-    randomly_place_player(current_level, guard)
+    randomly_place(current_level, guard)
     guard = Guard()
     monsters.append(guard)
-    randomly_place_player(current_level, guard)
+    randomly_place(current_level, guard)
 
 
     def game_loop():
@@ -80,17 +83,23 @@ def GameLogic():
             # have varying levels of commands:
             # active commands, such as 'strike' or movement, that allow monsters to react
             # passive commands, such as 'look', that do not allow monsters to react
-            if(action_resolved):
+            if action_resolved:
+                if action_resolved == "level_complete":
+                    return True
                 for monster in monsters:
                     monster.choose_action(player)
 
                     if not player.is_alive:
-                        return
+                        return False
                 continue   
             else:
                 print(f"You cannot {verb}.")
 
-    game_loop()
-    print('GAME OVER!')
+    win = game_loop()
+    if win:
+        print("You escaped the dungeon and won!!!")
+    else:
+        print("GAME OVER!")
+
 
 GameLogic()

@@ -55,7 +55,7 @@ class Player(Living):
                 if not resolved: 
                     continue
                 else:
-                    return True
+                    return resolved
 
         #is the action in some object in the enviroment of the player?
         for obj in self.environment.inventory:
@@ -64,12 +64,11 @@ class Player(Living):
                 if not resolved:
                     continue
                 else:
-                    return True
+                    return resolved
 
         #is the action in the enviroment's list of actions?
         if verb in self.environment.actions:
             return self.environment.actions[verb](verb, args, self) 
-
 
 
     def do_move_player(self, verb, args, player):
@@ -113,9 +112,3 @@ class Player(Living):
 
         print("Strike what?")
         return True
-
-
-
-
-
-    
