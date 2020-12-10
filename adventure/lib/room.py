@@ -5,7 +5,12 @@ class Room(Base):
 
     def __init__(self):
         super().__init__()
-        self.exits = {}
+        self.exits = {}   
+        #  self.exits = {
+            # 'north' 
+            # 'south '
+            # 'east'
+        # }
     
     def __str__(self):
         super.__str__()
@@ -21,15 +26,17 @@ class Room(Base):
     def visible_look(self):
         '''
         method that return a string of all the object that
-        are visible inside of a room.
+        are visible inside of a room...
         '''
         visible_object_found = ''
+        if self.inventory ==[]:
+            return 'The room if empty!'
         for obj in self.inventory :
             if obj.is_hidden() == False :
-                visible_object_found += obj.name+', '
-        return f"{visible_object_found}are the visible items found in the room"
+                visible_object_found += obj.name+'\n'
+            return f"The room contain:\n {visible_object_found}."
 
-      
+
     def search(self):
         '''
         method that return a string of all the object that
@@ -47,3 +54,11 @@ class Room(Base):
         if len(self.inventory):
             return ' X '
         return ' . '
+
+    def show_room(self, destinations, description):
+        destinations = self.exits.keys()
+        self.description = description
+        directions =''
+        for destination in destinations:
+            directions += destination+'\n'
+        return f"Room description:\n {description} \n direction avaible:\n  {directions}"
