@@ -68,7 +68,6 @@ def GameLogic():
                 if action_resolved == "level_complete":
                     level += 1
                     return True
-                
                     
                 # after a player action, all the items in the player's environment get a chance to introduce themselves
                 for obj in player.environment.inventory:

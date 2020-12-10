@@ -46,9 +46,8 @@ def randomly_place(map, thing):
     possibilities = []
     for row in range(len(map)):
         for col in range(len(map[row])):
-            if map[row][col]:
+            if map[row][col] and not len(map[row][col].inventory):
                 possibilities.append(map[row][col])
-    print(possibilities)
 
     thing.move(random.choice(possibilities))
 
