@@ -12,3 +12,14 @@ class Key(Item):
         self.move(player)
         print(f"You've collected the {self.name}.")
         return True
+
+    def print_door():
+        print(
+        """
+        
+           ,_____
+          / _    \___________________,
+          | | |     FREEDOM KEY      |
+          \______/````````````||`||`||
+        """
+        )
