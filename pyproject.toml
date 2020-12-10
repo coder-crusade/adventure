@@ -6,6 +6,7 @@ authors = ["Mark Bell <skrambelled@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+pyfiglet = "^0.8.post1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

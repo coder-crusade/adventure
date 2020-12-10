@@ -1,4 +1,5 @@
 from adventure.lib.player import Player
+import pyfiglet
 
 
 # level imports
@@ -11,6 +12,10 @@ from adventure.lib.map import show_map
 from adventure.items.torch import Torch
 
 
+def ascii_text(words):
+    return pyfiglet.figlet_format(words, font="big")
+
+
 def GameLogic():
 
     player = Player()
@@ -18,25 +23,6 @@ def GameLogic():
     monsters = []
 
     level = 1
-
-    # instantiate level1
-
-    # current_level = dungeon_maker(25, 25, 1)
-    # connect_rooms(current_level)
-    # randomly_place(current_level, player)
-
-    # door = Door()
-    # randomly_place(current_level, door)
-
-    # guard = Guard()
-    # monsters.append(guard)
-    # randomly_place(current_level, guard)
-    # guard = Guard()
-    # monsters.append(guard)
-    # randomly_place(current_level, guard)
-    # guard = Guard()
-    # monsters.append(guard)
-    # randomly_place(current_level, guard)
 
     def game_loop():
         nonlocal level
@@ -102,12 +88,15 @@ def GameLogic():
                 generate = generate_level3
         
             monsters, current_level = generate(player)
+            print(ascii_text(f"Level {level}"))
             result = game_loop()
         else:
             result = False
-            print("You escaped the dungeon and won!!!")
+            print("You escaped the dungeon!!!\n")
+            print(ascii_text("You did it!"))
+            return
     
-    print("GAME OVER!")
+    print(ascii_text("GAME OVER!"))
 
 
 GameLogic()
