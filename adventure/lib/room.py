@@ -26,7 +26,7 @@ class Room(Base):
     def visible_look(self):
         '''
         method that return a string of all the object that
-        are visible inside of a room...
+        are visible inside of a room.
         '''
         visible_object_found = ''
         if self.inventory ==[]:
