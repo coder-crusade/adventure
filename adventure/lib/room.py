@@ -6,7 +6,11 @@ class Room(Base):
     def __init__(self):
         super().__init__()
         self.exits = {}
+        self.x = None
+        self.y = None
+        
         self.actions = {"look" : self.do_visible_look}
+
     
     def __str__(self):
         super.__str__()
@@ -31,7 +35,7 @@ class Room(Base):
         print(f"{visible_object_found}are the visible items found in the room")
         return True
 
-
+ 
     def search(self):
         '''
         method that return a string of all the object that
@@ -48,4 +52,5 @@ class Room(Base):
     def __repr__(self):
         if len(self.inventory):
             return ' X '
+        
         return ' . '
