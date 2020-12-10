@@ -6,6 +6,7 @@ class Monster(Living):
     def __init__(self):
         super().__init__()
         self.angry = []
+        self.introduced = False
 
     def choose_action(self, player):
         if not self.is_alive:
@@ -20,3 +21,9 @@ class Monster(Living):
                 random_choice = (random.choice(choose_one_to_hit))
                 random_choice.hit(self.attack_value)
                 print(f"The {self.name} hits {random_choice.name} for {self.attack_value} damage!")
+
+    def introduce(self, player):
+        if introduced:
+            return
+        
+        introduced = True

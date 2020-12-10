@@ -25,3 +25,8 @@ class Guard(Monster):
         random_direction = random.choice(possibilities)
         random_room = self.environment.exits[random_direction]
         self.move(random_room)
+
+    def introduction(self):
+        def __init__():
+            super().__init__()
+            print_guard()

@@ -87,10 +87,15 @@ def GameLogic():
                 if action_resolved == "level_complete":
                     return True
                 for monster in monsters:
+                    if(player.environment == monster.environment):
+                        monster.introduce(player)
                     monster.choose_action(player)
 
+                    # player died due to some monsters action
                     if not player.is_alive:
                         return False
+
+                # we didn't win or die, so lets prompt another action
                 continue   
             else:
                 print(f"You cannot {verb}.")
