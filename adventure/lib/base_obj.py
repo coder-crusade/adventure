@@ -7,6 +7,7 @@ class Base:
         self.ids = []
         self.name = None
         self.hidden = False
+        self.actions = {}
 
     def move(self, destination):
         """

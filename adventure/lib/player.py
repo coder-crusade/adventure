@@ -4,6 +4,7 @@ from adventure.lib.living import Living
 class Player(Living):
     def __init__(self):
         super().__init__()
+        self.name = "you"
         self.actions = {
             # cardinal directions are always an available action,
             # so if the room does not have those exits, lets handle them
@@ -40,19 +41,37 @@ class Player(Living):
 
         # is the action part of the environments exit list?
         if verb in self.environment.exits.keys():
-            return self.do_move_player(verb, args)
+            return self.do_move_player(verb, args, self)
 
         # is the action is in the players action list?
         if verb in self.actions:
-            return self.actions[verb](verb, args)
+            return self.actions[verb](verb, args, self) 
 
         # is the action in some obejct in the inventory of the player?
         for obj in self.inventory:
             if verb in obj.actions:
-                if not obj[actions](verb, args):
+                resolved = obj.actions[verb](verb, args, self)
+                if not resolved: 
                     continue
+                else:
+                    return True
 
-    def do_move_player(self, verb, args):
+        #is the action in some object in the enviroment of the player?
+        for obj in self.environment.inventory:
+            if verb in obj.actions:
+                resolved = obj.actions[verb](verb, args, self) 
+                if not resolved:
+                    continue
+                else:
+                    return True
+
+        #is the action in the enviroment's list of actions?
+        if verb in self.environment.actions:
+            return self.environment.actions[verb](verb, args, self) 
+
+
+
+    def do_move_player(self, verb, args, player):
         """
         action to move a player in a cardinal direction
         """
@@ -62,13 +81,13 @@ class Player(Living):
         return True
 
 
-    def do_not_move_player(self, verb, arg):
+    def do_not_move_player(self, verb, arg, player):
         print(f'You bump into a wall as you try to walk {verb}.')
         return True
 
 
-    def do_strike(self, verb, args):
-        for thing in player.environment.inventory:
+    def do_strike(self, verb, args, player):
+        for thing in self.environment.inventory:
 
             if thing.name.lower() != args:
                 continue 
@@ -78,22 +97,22 @@ class Player(Living):
                 return True
 
             if not thing.is_alive:
+                thing.corpse_message()
                 return True
 
-            print(f"You hit the {thing.name} for {player.attack_value} damage!")
-            damage = thing.hit(player.attack_value)
+            print(f"You hit the {thing.name} for {self.attack_value} damage!")
+            damage = thing.hit(self.attack_value)
             if not self in thing.angry:
                 print(f'{thing.name} snarls at you!')
-                thing.angry.append(self)
-            
+                thing.angry.append(self) 
+
+            thing.respond_to_hit(self)
+        
             return True
 
+        print("Strike what?")
+        return True
 
-            if thing.health > 0:
-                damage = player.hit(thing.attack_value)
-                print(f"The {thing.name} hits you for {damage} damage!")
-
-            break 
 
 
 

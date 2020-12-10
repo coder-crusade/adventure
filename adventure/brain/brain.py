@@ -17,8 +17,9 @@ debug = {
 def GameLogic():
 
     player = Player()
+    monsters = []
 
-    def level1(player):
+    def level1():
         room1 = Room()
         room2 = Room()
         room3 = Room()
@@ -37,24 +38,25 @@ def GameLogic():
         room2.add_exit('east', room3)
         room3.add_exit('west', room2)
 
-        # create a rat and a key
+        # create a rat
         rat = Rat()
-        key = Key()
+        monsters.append(rat)
 
         # move everything to the proper room
         player.move(room1)
         rat.move(room2)
-        key.move(room2)
+
+        return [[room1, room2, room3]]
 
     # instantiate level1
-    # level1(player)
+    current_level = level1()
 
-    seths_map = dungeon_maker(12, 12)
-    connect_rooms(seths_map)
-    player.move(seths_map[0][0])
+    # seths_map = dungeon_maker(12, 12)
+    # connect_rooms(seths_map)
+    # player.move(seths_map[0][0])
 
     while True:
-        show_map2(seths_map)
+        show_map2(current_level)
 
         action = input(f'Health {player.health}/{player.max_health} > ')
 
@@ -75,27 +77,10 @@ def GameLogic():
         # active commands, such as 'strike' or movement, that allow monsters to react
         # passive commands, such as 'look', that do not allow monsters to react
         if(action_resolved):
+            for monster in monsters:
+                monster.choose_action()
             continue   
         else:
             print(f"You cannot {verb}. (yet)")
-
-#         elif verb == "strike":
-#             for thing in player.environment.inventory:
-
-#                 if thing.name.lower() != noun:
-#                     continue 
-
-#                 if not thing.is_alive:
-#                     return thing.is_corpse()
-
-#                 print(f"You hit the {thing.name} for {player.attack_value} damage!")
-#                 damage = thing.hit(player.attack_value)
-
-#                 if thing.health > 0:
-#                     damage = player.hit(thing.attack_value)
-#                     print(f"The {thing.name} hits you for {damage} damage!")
-#                     if thing.health > 0:
-#                         print(f"{thing.name} snarls at you!")
-#                         print("Hurry! Strike it again!")
 
 GameLogic()
