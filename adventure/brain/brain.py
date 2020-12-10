@@ -86,22 +86,28 @@ def GameLogic():
             if action_resolved:
                 if action_resolved == "level_complete":
                     return True
+                
+                    
+                # after a player action, all the items in the player's environment get a chance to introduce themselves
+                for obj in player.environment.inventory:
+                    if obj != player:
+                        obj.introduce(player)
+
+                # after player action, monsters get an opportunity for their own action
                 for monster in monsters:
-                    if(player.environment == monster.environment):
-                        monster.introduce(player)
                     monster.choose_action(player)
 
-                    # player died due to some monsters action
-                    if not player.is_alive:
-                        return False
+                # player died
+                if not player.is_alive:
+                    return False
 
                 # we didn't win or die, so lets prompt another action
                 continue   
             else:
                 print(f"You cannot {verb}.")
 
-    win = game_loop()
-    if win:
+    result = game_loop()
+    if result:
         print("You escaped the dungeon and won!!!")
     else:
         print("GAME OVER!")

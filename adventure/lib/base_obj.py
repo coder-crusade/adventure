@@ -9,6 +9,7 @@ class Base:
         self.hidden = False
         self.actions = {}
         self.my_map_string = "   "
+        self.introduced = False
 
     def move(self, destination):
         """
@@ -41,4 +42,11 @@ class Base:
     
     def is_hidden(self):
         return self.hidden
+
+    def introduce(self, player=None):
+        if self.introduced or not self.environment == player.environment:
+            return False
+        
+        self.introduced = True
+        return True
         

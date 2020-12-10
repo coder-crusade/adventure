@@ -13,21 +13,20 @@ class Guard(Monster):
     def choose_action(self, player):
         super().choose_action(player)
 
+        self.introduce(player)
+
         if self.environment == player.environment:
             if not len(self.angry):
                 print("The guard strikes you hard!")
                 player.hit(self.attack_value)
                 self.angry.append(player)
-
-        keys = self.environment.exits.keys()
-
-        possibilities = [ key for key in keys ]
-        random_direction = random.choice(possibilities)
-        random_room = self.environment.exits[random_direction]
-        self.move(random_room)
+        else:
+            self.random_move()
+            self.introduce(player)
 
     def introduce(self, player):
-        super().introduce(player)
+        if not super().introduce(player):
+            return
         self.print_guard()
 
     def print_guard(self):

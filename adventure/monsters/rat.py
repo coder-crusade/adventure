@@ -29,3 +29,27 @@ class Rat(Monster):
         super().hit(attack_value)
         if not self.is_alive:
             print(f"Perhaps you can 'Search {self.name}'")
+
+    def introduce(self, player):
+        if not super().introduce(player):
+            return
+        self.print_rat()
+
+    def print_rat(self):
+        print(
+"""
+    You stumble into a giant rat! Perhaps you could 'strike rat'?
+
+                 _     __,..---""-._                 ';-,
+        ,    _/_),-"`             '-.                `\\\\
+       \|.-"`    -_)                 '.                ||
+       /`   a   ,                      \              .'/
+       '.___,__/                 .-'    \_        _.-'.'
+          |\  \      \         /`        _`""""""`_.-'
+             _/;--._, >        |   --.__/ `""""""`
+           (((-'  __//`'-......-;\      )
+                (((-'       __//  '--. /
+                          (((-'    __//
+                                 (((-'
+"""
+)
