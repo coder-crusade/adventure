@@ -57,10 +57,9 @@ class Room(Base):
         
         return ' . '
 
-    def show_room(self, destinations, description):
+    def show_room(self):
         destinations = self.exits.keys()
-        self.description = description
         directions =''
         for destination in destinations:
             directions += destination+'\n'
-        return f"Room description:\n {description} \n direction avaible:\n  {directions}"
+        print(f"Room description:\n {self.description} \n directions available:\n  {directions}")
