@@ -2,7 +2,7 @@ from adventure.lib.player import Player
 from adventure.lib.room import Room
 
 # testing
-from adventure.lib.map import connect_rooms, dungeon_maker, show_map2
+from adventure.lib.map import connect_rooms, dungeon_maker, show_map
 
 # level 1 imports
 from adventure.monsters.rat import Rat
@@ -54,13 +54,13 @@ def GameLogic():
     # instantiate level1
     # level1(player)
 
-    seths_map = dungeon_maker(12, 12)
+    seths_map = dungeon_maker(20, 20)
     connect_rooms(seths_map)
     player.move(seths_map[0][0])
 
     # prompt_string = 
     while True:
-        show_map2(seths_map)
+        show_map(seths_map, player)
 
         action = input(f'Health {player.health}/{player.max_health} > ')
 

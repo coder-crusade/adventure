@@ -1,4 +1,6 @@
 from adventure.lib.room import Room
+from adventure.monsters.rat import Rat
+from adventure.lib.player import Player
 import random
 
 map2 = [
@@ -55,33 +57,37 @@ def dungeon_maker(width, height):
     for row in range(height):
         map[row] = [None] * width
 
-    def crawl(row, col, distance):
-        if not distance:
-            return
+    def crawl(row, col, distance, north_weight, south_weight, east_weight, west_weight):
 
         if not map[row][col]:
             map[row][col] = Room()
-        
+            map[row][col].x = col
+            map[row][col].y = row 
+
+        if not distance:
+            rat = Rat()
+            rat.move(map[row][col])
+            return
         possible_directions = []
 
         if row - 1 >= 0:
-            if not map[row][col]:
-                possible_directions.extend(['north'] * 5)
+            if not map[row - 1][col]:
+                possible_directions.extend(['north'] * north_weight)
             else:
                 possible_directions.append('north')
         if row + 1 < len(map):
-            if not map[row][col]:
-                possible_directions.extend(['south'] * 10)
+            if map[row + 1][col]:
+                possible_directions.extend(['south'] * south_weight)
             else:
                 possible_directions.append('south')
         if col - 1 >= 0:
-            if not map[row][col]:
-                possible_directions.extend(['west'] * 5)
+            if not map[row][col - 1]:
+                possible_directions.extend(['west'] * west_weight)
             else:
                 possible_directions.append('west')
         if col + 1 < len(map[row]):
-            if not map[row][col]:
-                possible_directions.extend(['east'] * 10)
+            if not map[row][col + 1]:
+                possible_directions.extend(['east'] * east_weight)
             else:
                 possible_directions.append('east')
 
@@ -96,9 +102,12 @@ def dungeon_maker(width, height):
         # random_direction == 'west':
         else:
             col -= 1
-        crawl(row, col, distance-1)
+        crawl(row, col, distance-1, north_weight, south_weight, east_weight, west_weight)
     
-    crawl(0,0,150)
+    crawl(19, 0, 40, 70, 10, 70, 10)
+    crawl(19, 19, 40, 70, 10, 10, 70)
+    crawl(0, 0, 40, 10, 70, 70, 10)
+    crawl(0, 19, 40, 10, 70, 10, 70)
 
     # for row in range(height):
     #     for col in range(width):
@@ -107,13 +116,22 @@ def dungeon_maker(width, height):
     return map
 
 
-def show_map2(map):
+def show_map(map, player, radius=3):
+    player_x = player.environment.x
+    player_y = player.environment.y
     for row in range(len(map)):
         output = ""
         for col in range(len(map[row])):
-            if map[row][col]:
-                output += repr(map[row][col])
+            room = map[row][col]
+
+            room_x = col 
+            room_y = row
+            if abs(room_x - player_x)**2 + abs(room_y - player_y)**2 <= radius**2:
+                if room:
+                    output += repr(room)
+                else:
+                    output += '[ ]'
             else:
-                output += '[ ]'
+                output += "   "
         print(output)
 
