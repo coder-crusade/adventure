@@ -1,6 +1,7 @@
 from adventure.lib.base_obj import Base
 from adventure.lib.room import Room
 from adventure.items.key import Key
+
 class Living(Base):
 
     def __init__(self):
