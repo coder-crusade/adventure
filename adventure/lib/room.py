@@ -8,8 +8,9 @@ class Room(Base):
         self.exits = {}
         self.x = None
         self.y = None
+        self.description = "A sparse room with a cold stone floor."
         
-        self.actions = {"look" : self.do_visible_look}
+        self.actions = {"look" : self.do_show_room}
     
     def __str__(self):
         super.__str__()
@@ -22,20 +23,20 @@ class Room(Base):
         self.exits[direction] = room
 
 
-    def do_visible_look(self, verb=None, args=None, player=None):
+    def visible_look(self):
         '''
         method that return a string of all the object that
         are visible inside of a room.
         '''
         visible_object_found = ''
-        if self.inventory ==[]:
+        if not len(self.inventory) == 1:
             print('The room is empty!')
-            return
+            return True
         for obj in self.inventory :
-            if obj.is_hidden() == False :
-
-                visible_object_found += obj.name+'\n'
-            print(f"The room contain:\n {visible_object_found}.")
+            if obj.is_hidden() == False and not obj.name == 'you':
+                visible_object_found += " "+obj.name+'\n'
+        print(f"The room contains:\n {visible_object_found}")
+        return True
 
 
 
@@ -58,9 +59,15 @@ class Room(Base):
         
         return ' . '
 
-    def show_room(self):
-        destinations = self.exits.keys()
-        directions =''
-        for destination in destinations:
-            directions += destination+'\n'
-        print(f"Room description:\n {self.description} \n directions available:\n  {directions}")
+
+    def do_show_room(self, verb=None, args=None, player=None):
+        destinations = []
+        for key in self.exits.keys():
+            destinations.append(key)
+        directions = ''
+        for i in range(len(destinations)-1):
+            directions += destinations[i] + ", "
+        directions += destinations[len(destinations)-1]+"."
+        print(f"{self.description}\n Directions available: {directions}")
+        self.visible_look()
+        return True
