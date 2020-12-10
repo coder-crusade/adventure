@@ -1,4 +1,6 @@
 from adventure.lib.base_obj import Base
+from adventure.lib.room import Room
+from adventure.items.key import Key
 class Living(Base):
 
     def __init__(self):
@@ -41,5 +43,8 @@ class Living(Base):
             return False
         return True
 
-    def is_corpse(self):
+    def corpse_message(self):
         print(f"Alright, that\'s enough! You already killed the {self.name}!")
+
+    def respond_to_hit(self, player):
+        pass

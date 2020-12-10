@@ -2,28 +2,21 @@ from adventure.lib.player import Player
 from adventure.lib.room import Room
 
 # testing
-from adventure.lib.map import connect_rooms, dungeon_maker, show_map2
+from adventure.lib.map import connect_rooms, dungeon_maker, show_map, randomly_place
 
-# level 1 imports
-from adventure.monsters.rat import Rat
+# level imports
 from adventure.items.key import Key
-
-debug = {
-    'action' : True,
-    'room-movement' : True,
-    'combat' : True
-}
+from adventure.items.door import Door
+from adventure.monsters.rat import Rat
+from adventure.monsters.guard import Guard
 
 
 def GameLogic():
 
-    # probably should move this into the player object
-    def move_player(destination):
-        player.move(destination)
-
     player = Player()
+    monsters = []
 
-    def level1(player):
+    def level1():
         room1 = Room()
         room2 = Room()
         room3 = Room()
@@ -42,81 +35,71 @@ def GameLogic():
         room2.add_exit('east', room3)
         room3.add_exit('west', room2)
 
-        # create a rat and a key
+        # create a rat
         rat = Rat()
-        key = Key()
+        monsters.append(rat)
 
         # move everything to the proper room
         player.move(room1)
         rat.move(room2)
-        key.move(room2)
+
+        return [[room1, room2, room3]]
 
     # instantiate level1
-    # level1(player)
+    # current_level = level1()
 
-    seths_map = dungeon_maker(12, 12)
-    connect_rooms(seths_map)
-    player.move(seths_map[0][0])
+    current_level = dungeon_maker(25, 25, 1)
+    connect_rooms(current_level)
+    randomly_place(current_level, player)
 
-    # prompt_string = 
-    while True:
-        show_map2(seths_map)
+    door = Door()
+    randomly_place(current_level, door)
 
-        action = input(f'Health {player.health}/{player.max_health} > ')
+    guard = Guard()
+    monsters.append(guard)
+    randomly_place(current_level, guard)
+    guard = Guard()
+    monsters.append(guard)
+    randomly_place(current_level, guard)
+    guard = Guard()
+    monsters.append(guard)
+    randomly_place(current_level, guard)
 
-        action = action.strip().lower()
 
-        verb = action.split(" ")[0:1][0]
-        noun = " ".join(action.split(" ")[1:])
+    def game_loop():
+        while True:
+            show_map(current_level, player)
+            
+            action = input(f'Health {player.health}/{player.max_health} > ')
 
-        if debug['action']:
-            print('action:', action)
-            print('verb:', verb)
-            print('noun:', noun)
+            action = action.strip().lower()
 
-        # handle movement
+            verb = action.split(" ")[0:1][0]
+            args = " ".join(action.split(" ")[1:])
 
-        # expand short directions into longer directions
-        if verb == 'n':
-            verb = 'north'
-        elif verb == 's':
-            verb = 'south'
-        elif verb == 'e':
-            verb = 'east'
-        elif verb == 'w':
-            verb = 'west'
+            # actions are hanled in the player object
+            action_resolved = player.action(verb, args)
+            # stretch: allow more than True/False resolutions, so that we can
+            # have varying levels of commands:
+            # active commands, such as 'strike' or movement, that allow monsters to react
+            # passive commands, such as 'look', that do not allow monsters to react
+            if action_resolved:
+                if action_resolved == "level_complete":
+                    return True
+                for monster in monsters:
+                    monster.choose_action(player)
 
-        if verb in ['north', 'south', 'east', 'west']:
-            if verb in player.environment.exits:
-                print(f'You walk {verb}')
-                move_player(player.environment.exits[verb])
+                    if not player.is_alive:
+                        return False
+                continue   
             else:
-                print("You hit wall")
+                print(f"You cannot {verb}.")
 
-        elif verb == "strike":
-            for thing in player.environment.inventory:
-
-                if thing.name.lower() != noun:
-                    continue 
-
-                if not thing.is_alive:
-                    return thing.is_corpse()
-
-                print(f"You hit the {thing.name} for {player.attack_value} damage!")
-                damage = thing.hit(player.attack_value)
-
-                if thing.health > 0:
-                    damage = player.hit(thing.attack_value)
-                    print(f"The {thing.name} hits you for {damage} damage!")
-
-                if debug['combat']:
-                    print(f'Player Health: {player.health}/{player.max_health}')
-                    print(f'Opponents Health: {thing.health}/{thing.max_health}')
-
-                break 
-
-        else:
-            print(f"You cannot {verb}. (yet)")
+    win = game_loop()
+    if win:
+        print("You escaped the dungeon and won!!!")
+    else:
+        print("GAME OVER!")
 
 
 GameLogic()
