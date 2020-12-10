@@ -8,6 +8,9 @@ class Room(Base):
         self.exits = {}
         self.x = None
         self.y = None
+        
+        self.actions = {"look" : self.do_visible_look}
+
     
     def __str__(self):
         super.__str__()
@@ -18,9 +21,9 @@ class Room(Base):
         method that add exits to any given  room
         '''
         self.exits[direction] = room
-    
 
-    def visible_look(self):
+
+    def do_visible_look(self, verb, args, player):
         '''
         method that return a string of all the object that
         are visible inside of a room.
@@ -29,9 +32,10 @@ class Room(Base):
         for obj in self.inventory :
             if obj.is_hidden() == False :
                 visible_object_found += obj.name+', '
-        return f"{visible_object_found}are the visible items found in the room"
+        print(f"{visible_object_found}are the visible items found in the room")
+        return True
 
-    
+ 
     def search(self):
         '''
         method that return a string of all the object that
@@ -42,8 +46,8 @@ class Room(Base):
             if obj.is_hidden() == True:
                 invisible_object_found += obj.name+', '
                 obj.hidden = False
-        return f"{invisible_object_found}are the hidden items found in the room"
-    
+        print(f"Whoa! You found a {invisible_object_found}! I wonder if this is useful?")
+
 
     def __repr__(self):
         if len(self.inventory):
