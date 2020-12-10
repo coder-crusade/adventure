@@ -25,9 +25,9 @@ class Torch(Item):
         """
     You found a torch, perhaps you could 'collect' it!
 
-            )            
+         )            
         *7*
-        (`)`)
+       (`)`)
         |||
         |||
         |_|
