@@ -41,12 +41,12 @@ def GameLogic():
     def game_loop():
         nonlocal level
         # initial fog of war viewing radius
-        radius = 3
+        radius = 4
 
         while True:
             for obj in player.inventory:
                 if(isinstance(obj, Torch)):
-                    radius = 6
+                    radius = 7
             show_map(current_level, player, radius)
             
             
