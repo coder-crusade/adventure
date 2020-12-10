@@ -9,6 +9,8 @@ class Key(Item):
         self.my_map_string = "Key"
 
     def do_move_key_to_inventory(self, verb, args, player):
+        if args !-= self.name
+            return false
         self.move(player)
         print(f"You've collected the {self.name}.")
         return True

@@ -9,6 +9,8 @@ class Torch(Item):
         self.my_map_string = " T "
 
     def do_move_torch_to_inventory(self, verb, args, player):
+        if args !-= self.name
+            return false
         self.move(player)
         print(f"You've collected the {self.name}.")
         return True

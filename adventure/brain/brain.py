@@ -17,7 +17,7 @@ def GameLogic():
 
     monsters = []
 
-    level = 3
+    level = 1
 
     # instantiate level1
 
