@@ -22,14 +22,15 @@ class Room(Base):
         self.exits[direction] = room
 
 
-    def do_visible_look(self, verb, args, player):
+    def do_visible_look(self, verb=None, args=None, player=None):
         '''
         method that return a string of all the object that
         are visible inside of a room.
         '''
         visible_object_found = ''
         if self.inventory ==[]:
-            return 'The room if empty!'
+            print('The room is empty!')
+            return
         for obj in self.inventory :
             if obj.is_hidden() == False :
 

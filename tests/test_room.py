@@ -14,13 +14,17 @@ def test_two_rooms():
     assert room2.exits['south'] == room1
     assert room1.exits['north'] == room2
 
-def test_visible_look_with_obj():
+def test_visible_look_with_obj(capsys):
     room = Room()
     rat = Rat()
     room.inventory = [rat]
-    assert room.visible_look() == "The room contain:\n Rabies Rat\n."
+    room.do_visible_look()  
+    capture = capsys.readouterr() 
+    assert capture.out == "The room contain:\n Rabies Rat\n.\n"
 
-def test_visible_look_without_obj():
+def test_visible_look_without_obj(capsys):
     room = Room()
     room.inventory = []
-    assert room.visible_look() == "The room if empty!"
+    room.do_visible_look() 
+    capture = capsys.readouterr() 
+    assert capture.out == "The room is empty!\n"
