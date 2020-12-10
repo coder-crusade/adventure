@@ -25,3 +25,29 @@ class Guard(Monster):
         random_direction = random.choice(possibilities)
         random_room = self.environment.exits[random_direction]
         self.move(random_room)
+    
+    def print_guard():
+        print(
+"""
+there's a guard
+                   {}
+                  .--.
+                 /.--.\
+                 |====|
+                 |`::`|  
+             .-;`\..../`;_.-^-._
+            /  |...::..|`   :   `|
+           |   /'''::''|   .:.   |
+           ;--'\   ::  |..:::::..|
+           <__> >._::_.| ':::::' |
+           |  |/   ^^  |   ':'   |
+           \::/|       \    :    /
+           |||\|        \   :   / 
+           ''' |___/\___|`-.:.-`
+                \_ || _/    `
+                <_ >< _>
+                |  ||  |
+                |  ||  |
+               _\.:||:./_
+              /____/\____\
+    """)
