@@ -20,3 +20,11 @@ class Monster(Living):
                 random_choice = (random.choice(choose_one_to_hit))
                 random_choice.hit(self.attack_value)
                 print(f"The {self.name} hits {random_choice.name} for {self.attack_value} damage!")
+
+    def random_move(self):
+        keys = self.environment.exits.keys()
+
+        possibilities = [ key for key in keys ]
+        random_direction = random.choice(possibilities)
+        random_room = self.environment.exits[random_direction]
+        self.move(random_room)

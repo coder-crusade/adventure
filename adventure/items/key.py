@@ -12,3 +12,18 @@ class Key(Item):
         self.move(player)
         print(f"You've collected the {self.name}.")
         return True
+
+    def introduce(self, player):
+        if not super().introduce(player):
+            return
+        self.print_key()
+
+    def print_key(self):
+        print(
+        """
+           ,_____
+          /  _   \___________________,
+          | |_|    FREEDOM KEY       |
+          \______/````````````||`||`||
+        """
+        )

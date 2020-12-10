@@ -1,74 +1,55 @@
 from adventure.lib.player import Player
-from adventure.lib.room import Room
 
-# testing
-from adventure.lib.map import connect_rooms, dungeon_maker, show_map, randomly_place
 
 # level imports
-from adventure.items.key import Key
-from adventure.items.door import Door
-from adventure.monsters.rat import Rat
-from adventure.monsters.guard import Guard
+from adventure.brain.levels import generate_level1
+from adventure.brain.levels import generate_level2
+from adventure.brain.levels import generate_level3
+
+# for showing the map on each action
+from adventure.lib.map import show_map
+from adventure.items.torch import Torch
 
 
 def GameLogic():
 
     player = Player()
+
     monsters = []
 
-    def level1():
-        room1 = Room()
-        room2 = Room()
-        room3 = Room()
-
-        # map looks like this:
-        #
-        #  [ room1 ] - [ room2 ] - [ room3 ]
-        #     ^            ^
-        #   player     rat & key
-
-        # link room1 <-> room2
-        room1.add_exit('east', room2)
-        room2.add_exit('west', room1)
-
-        # link room2 <-> room3
-        room2.add_exit('east', room3)
-        room3.add_exit('west', room2)
-
-        # create a rat
-        rat = Rat()
-        monsters.append(rat)
-
-        # move everything to the proper room
-        player.move(room1)
-        rat.move(room2)
-
-        return [[room1, room2, room3]]
+    level = 3
 
     # instantiate level1
-    # current_level = level1()
 
-    current_level = dungeon_maker(25, 25, 1)
-    connect_rooms(current_level)
-    randomly_place(current_level, player)
+    # current_level = dungeon_maker(25, 25, 1)
+    # connect_rooms(current_level)
+    # randomly_place(current_level, player)
 
-    door = Door()
-    randomly_place(current_level, door)
+    # door = Door()
+    # randomly_place(current_level, door)
 
-    guard = Guard()
-    monsters.append(guard)
-    randomly_place(current_level, guard)
-    guard = Guard()
-    monsters.append(guard)
-    randomly_place(current_level, guard)
-    guard = Guard()
-    monsters.append(guard)
-    randomly_place(current_level, guard)
-
+    # guard = Guard()
+    # monsters.append(guard)
+    # randomly_place(current_level, guard)
+    # guard = Guard()
+    # monsters.append(guard)
+    # randomly_place(current_level, guard)
+    # guard = Guard()
+    # monsters.append(guard)
+    # randomly_place(current_level, guard)
 
     def game_loop():
+        nonlocal level
+        # initial fog of war viewing radius
+        radius = 3
+
         while True:
-            show_map(current_level, player)
+            for obj in player.inventory:
+                if(isinstance(obj, Torch)):
+                    radius = 6
+            show_map(current_level, player, radius)
+            
+            
             
             action = input(f'Health {player.health}/{player.max_health} > ')
 
@@ -85,21 +66,49 @@ def GameLogic():
             # passive commands, such as 'look', that do not allow monsters to react
             if action_resolved:
                 if action_resolved == "level_complete":
+                    level += 1
                     return True
+                
+                    
+                # after a player action, all the items in the player's environment get a chance to introduce themselves
+                for obj in player.environment.inventory:
+                    if obj != player:
+                        obj.introduce(player)
+
+                # after player action, monsters get an opportunity for their own action
                 for monster in monsters:
                     monster.choose_action(player)
 
-                    if not player.is_alive:
-                        return False
+                # player died
+                if not player.is_alive:
+                    return False
+
+                # we didn't win or die, so lets prompt another action
                 continue   
             else:
                 print(f"You cannot {verb}.")
 
-    win = game_loop()
-    if win:
-        print("You escaped the dungeon and won!!!")
-    else:
-        print("GAME OVER!")
+
+
+    result = True
+    while result:
+        if(level <= 3):
+
+            # set up whichever level we need to generate
+            if(level == 1):
+                generate = generate_level1
+            if(level == 2):
+                generate = generate_level2
+            if(level == 3):
+                generate = generate_level3
+        
+            monsters, current_level = generate(player)
+            result = game_loop()
+        else:
+            result = False
+            print("You escaped the dungeon and won!!!")
+    
+    print("GAME OVER!")
 
 
 GameLogic()
