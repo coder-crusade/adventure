@@ -53,46 +53,58 @@ def connect_rooms(map):
                 current.add_exit('south', south)
 
 
-def dungeon_maker(width, height):
+def randomly_place_player(map, player):
+    possibilities = []
+    for row in range(len(map)):
+        for col in range(len(map[row])):
+            if map[row][col]:
+                possibilities.append(map[row][col])
+    print(possibilities)
+
+    player.move(random.choice(possibilities))
+
+
+def dungeon_maker(width, height, crawlers=0):
     map = [None] * height
     for row in range(height):
         map[row] = [None] * width
 
-    def crawl(row, col, distance, north_weight, south_weight, east_weight, west_weight):
-        if not distance:
-            rat = Rat()
-            rat.move(map[row][col])
-            return
-
+    def crawl(row, col, distance, weight):
         if not map[row][col]:
             map[row][col] = Room()
             map[row][col].x = col
-            map[row][col].y = row 
+            map[row][col].y = row
 
         if not distance:
             rat = Rat()
             rat.move(map[row][col])
             return
+
+        if not distance:
+            rat = Rat()
+            rat.move(map[row][col])
+            return
+
         possible_directions = []
 
         if row - 1 >= 0:
             if not map[row - 1][col]:
-                possible_directions.extend(['north'] * north_weight)
+                possible_directions.extend(['north'] * weight)
             else:
                 possible_directions.append('north')
         if row + 1 < len(map):
             if map[row + 1][col]:
-                possible_directions.extend(['south'] * south_weight)
+                possible_directions.extend(['south'] * weight)
             else:
                 possible_directions.append('south')
         if col - 1 >= 0:
             if not map[row][col - 1]:
-                possible_directions.extend(['west'] * west_weight)
+                possible_directions.extend(['west'] * weight)
             else:
                 possible_directions.append('west')
         if col + 1 < len(map[row]):
             if not map[row][col + 1]:
-                possible_directions.extend(['east'] * east_weight)
+                possible_directions.extend(['east'] * weight)
             else:
                 possible_directions.append('east')
 
@@ -107,36 +119,42 @@ def dungeon_maker(width, height):
         # random_direction == 'west':
         else:
             col -= 1
-        crawl(row, col, distance-1, north_weight, south_weight, east_weight, west_weight)
+        crawl(row, col, distance-1, weight)
     
-    crawl(19, 0, 40, 70, 10, 70, 10)
-    crawl(19, 19, 40, 70, 10, 10, 70)
-    crawl(0, 0, 40, 10, 70, 70, 10)
-    crawl(0, 19, 40, 10, 70, 10, 70)
-
-    # for row in range(height):
-    #     for col in range(width):
-    #         room = Room()
-    #         map[row][col] = room
+    # if we defined some number of crawlers, lets crawl the map
+    if crawlers:
+        while crawlers:
+            crawlers -= 1
+            crawl(random.randint(0, height-1), random.randint(0, width-1), int(height*width/3), int(height*width/5))
+    # if we did not define any crawlers, lets make an 'open floor plan'
+    else:
+        for row in range(height):
+            for col in range(width):
+                room = Room()
+                map[row][col] = room
     return map
 
 
-def show_map(map, player, radius=3):
+def show_map(map, player, radius=6):
     player_x = player.environment.x
     player_y = player.environment.y
+    print("+" + "-" * (3*len(map[0])) + "+")
     for row in range(len(map)):
-        output = ""
+        output = "|"
         for col in range(len(map[row])):
             room = map[row][col]
 
             room_x = col 
             room_y = row
             if abs(room_x - player_x)**2 + abs(room_y - player_y)**2 <= radius**2:
-                if room:
+                if room:                 
                     output += repr(room)
                 else:
                     output += '[ ]'
             else:
                 output += "   "
+            
+        output += "|"
         print(output)
+    print("+" + "-" * (3*len(map[0])) + "+")
 

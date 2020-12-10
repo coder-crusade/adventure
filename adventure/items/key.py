@@ -6,6 +6,7 @@ class Key(Item):
         self.name = "Key"
         self.description = "This rusty old key might be just what you need to get out of here!"
         self.actions = {"collect" : self.do_move_key_to_inventory}
+        self.my_map_string = "Key"
 
     def do_move_key_to_inventory(self, verb, args, player):
         self.move(player)

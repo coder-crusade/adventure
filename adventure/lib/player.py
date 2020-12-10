@@ -5,6 +5,7 @@ class Player(Living):
     def __init__(self):
         super().__init__()
         self.name = "you"
+        self.my_map_string = "You"
         self.actions = {
             # cardinal directions are always an available action,
             # so if the room does not have those exits, lets handle them
