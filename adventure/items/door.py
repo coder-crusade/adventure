@@ -19,4 +19,3 @@ class Door(Item):
                 return "level_complete"
         print("You must collect a key.")
         return True
-        
