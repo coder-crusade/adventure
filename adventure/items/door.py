@@ -19,3 +19,33 @@ class Door(Item):
                 return "level_complete"
         print("You must collect a key.")
         return True
+
+
+    def introduce(self, player):
+        if not super().introduce(player):
+            return
+        self.print_door()
+        
+    def print_door(self):
+        print(
+        """
+           You've found a door!
+        Perhapss you can 'unlock' it
+         __________________
+        |_________________|\\
+         | _____ | _____ | |
+         | |###| | |###| | |
+         | |###| | |###| | |  
+         | _____ | _____ | |  
+         | || || | || || | |
+         | ||_|| | ||_|| | |
+         | _____O|O_____ | | 
+         | || || | || || | | 
+         | ||_|| | ||_|| | |
+         | _____ | _____ | |
+         | || || | || || | | 
+         | ||_|| | ||_|| | |       
+         |       |       | |       
+         *****************`
+        """
+        )

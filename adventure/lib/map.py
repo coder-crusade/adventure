@@ -1,18 +1,7 @@
 from adventure.lib.room import Room
-from adventure.monsters.rat import Rat
 from adventure.lib.player import Player
 
 import random
-
-map2 = [
-    [0, 1, 1, 1],
-    [1, 0, 0, 1],
-    [1, 0, 0, 1],
-    [1, 1, 1, 1]
-]
-
-# room1.add_exit('east', room2)
-# room2.add_exit('west', room1)
 
 
 def connect_rooms(map):
@@ -57,9 +46,8 @@ def randomly_place(map, thing):
     possibilities = []
     for row in range(len(map)):
         for col in range(len(map[row])):
-            if map[row][col]:
+            if map[row][col] and not len(map[row][col].inventory):
                 possibilities.append(map[row][col])
-    print(possibilities)
 
     thing.move(random.choice(possibilities))
 
@@ -76,13 +64,6 @@ def dungeon_maker(width, height, crawlers=0):
             map[row][col].y = row
 
         if not distance:
-            rat = Rat()
-            rat.move(map[row][col])
-            return
-
-        if not distance:
-            rat = Rat()
-            rat.move(map[row][col])
             return
 
         possible_directions = []
@@ -132,10 +113,12 @@ def dungeon_maker(width, height, crawlers=0):
             for col in range(width):
                 room = Room()
                 map[row][col] = room
+                map[row][col].x = col
+                map[row][col].y = row
     return map
 
 
-def show_map(map, player, radius=6):
+def show_map(map, player, radius=5):
     player_x = player.environment.x
     player_y = player.environment.y
     print("+" + "-" * (3*len(map[0])) + "+")

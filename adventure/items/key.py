@@ -9,6 +9,23 @@ class Key(Item):
         self.my_map_string = "Key"
 
     def do_move_key_to_inventory(self, verb, args, player):
+        if args != self.name.lower():
+            return False
         self.move(player)
         print(f"You've collected the {self.name}.")
         return True
+
+    def introduce(self, player):
+        if not super().introduce(player):
+            return
+        self.print_key()
+
+    def print_key(self):
+        print(
+        """
+           ,_____
+          /  _   \___________________,
+          | |_|    FREEDOM KEY       |
+          \______/````````````||`||`||
+        """
+        )
