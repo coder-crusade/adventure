@@ -1,88 +1,102 @@
 from adventure.lib.player import Player
-from adventure.lib.room import Room
+import pyfiglet
 
-# level 1 imports
-from adventure.monsters.rat import Rat
-from adventure.items.key import Key
 
-debug = {
-    'action' : True,
-    'room-movement' : True,
-}
+# level imports
+from adventure.brain.levels import generate_level1
+from adventure.brain.levels import generate_level2
+from adventure.brain.levels import generate_level3
+
+# for showing the map on each action
+from adventure.lib.map import show_map
+from adventure.items.torch import Torch
+
+
+def ascii_text(words):
+    return pyfiglet.figlet_format(words, font="big")
+
 
 def GameLogic():
 
-    # probably should move this into the player object
-    def move_player(destination):
-        player.move(destination)
-
     player = Player()
 
-    def level1(player):
-        room1 = Room()
-        room2 = Room()
-        room3 = Room()
+    monsters = []
 
-        # map looks like this:
-        #
-        #  [ room1 ] - [ room2 ] - [ room3 ]
-        #     ^            ^
-        #   player     rat & key
+    level = 1
 
-        # link room1 <-> room2
-        room1.add_exit('east', room2)
-        room2.add_exit('west', room1)
+    def game_loop():
+        nonlocal level
+        # initial fog of war viewing radius
+        radius = 4
 
-        # link room2 <-> room3
-        room2.add_exit('east', room3)
-        room3.add_exit('west', room2)
+        while True:
+            for obj in player.inventory:
+                if(isinstance(obj, Torch)):
+                    radius = 7
+            show_map(current_level, player, radius)
+            
+            
+            
+            action = input(f'Health {player.health}/{player.max_health} > ')
 
-        # create a rat and a key
-        rat = Rat()
-        key = Key()
+            action = action.strip().lower()
 
-        # move everything to the proper room
-        player.move(room1)
-        rat.move(room2)
-        key.move(room2)
+            verb = action.split(" ")[0:1][0]
+            args = " ".join(action.split(" ")[1:])
 
-    # instantiate level1
-    level1(player)
+            # actions are hanled in the player object
+            action_resolved = player.action(verb, args)
+            # stretch: allow more than True/False resolutions, so that we can
+            # have varying levels of commands:
+            # active commands, such as 'strike' or movement, that allow monsters to react
+            # passive commands, such as 'look', that do not allow monsters to react
+            if action_resolved:
+                if action_resolved == "level_complete":
+                    level += 1
+                    return True
+                    
+                # after a player action, all the items in the player's environment get a chance to introduce themselves
+                for obj in player.environment.inventory:
+                    if obj != player:
+                        obj.introduce(player)
 
-    prompt_string = '> '
-    while True:
-        action = input(prompt_string)
+                # after player action, monsters get an opportunity for their own action
+                for monster in monsters:
+                    monster.choose_action(player)
 
-        action = action.strip().lower()
+                # player died
+                if not player.is_alive:
+                    return False
 
-        verb = action.split(" ")[0:1][0]
-        noun = action.split(" ")[1:]
-
-        if debug['action']:
-            print('action:', action)
-            print('verb:', verb)
-            print('noun:', noun)
-
-        # handle movement
-
-        # expand short directions into longer directions
-        if verb == 'n':
-            verb = 'north'
-        elif verb == 's':
-            verb = 'south'
-        elif verb == 'e':
-            verb = 'east'
-        elif verb == 'w':
-            verb = 'west'
-
-        if verb in ['north', 'south', 'east', 'west']:
-            if verb in player.environment.exits:
-                print(f'You walk {verb}')
-                move_player(player.environment.exits[verb])
+                # we didn't win or die, so lets prompt another action
+                continue   
             else:
-                print("You hit wall")
+                print(f"You cannot {verb}.")
+
+
+
+    result = True
+    while result:
+        if(level <= 3):
+
+            # set up whichever level we need to generate
+            if(level == 1):
+                generate = generate_level1
+            if(level == 2):
+                generate = generate_level2
+            if(level == 3):
+                generate = generate_level3
+        
+            monsters, current_level = generate(player)
+            print(ascii_text(f"Level {level}"))
+            result = game_loop()
         else:
-            print(f"You cannot {verb}. (yet)")
+            result = False
+            print("You escaped the dungeon!!!\n")
+            print(ascii_text("You did it!"))
+            return
+    
+    print(ascii_text("GAME OVER!"))
 
 
 GameLogic()
