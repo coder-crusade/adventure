@@ -19,7 +19,7 @@ def test_key_actions():
 def test_move_key_to_inventory(capsys):
     key = Key()
     player = Player()
-    actual_1 = key.do_move_key_to_inventory('collect', key, player)
+    actual_1 = key.do_move_key_to_inventory('collect', 'key', player)
     expected_1 = True
     captured = capsys.readouterr()
     actual_2 = captured.out
