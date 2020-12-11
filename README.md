@@ -7,3 +7,11 @@
 # Domain Model
 ![img](dev_notes/domain_model.png)
 - Our team created this Domain Model to visualize the connections between the different objects in the game...
+
+# ASCII art
+rat, guard, door, ASCII art from www.asciiart.eu
+
+torch by Mark Bell
+
+key by Seth Mcfeeters
+
