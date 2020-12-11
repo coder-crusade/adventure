@@ -32,13 +32,9 @@ def test_do_search_corpse(capsys):
     player = Player()
     rat.move(room)
     player.move(room)
-    actual_1 = rat.do_search_corpse('search', rat, player)
-    expected_1 = True
-    captured = capsys.readouterr()
-    actual_2 = captured.out
-    expected_2 = "As you search the Rat you hear a Key hit the floor! You should 'Collect' it!\n"
-    assert expected_1 == actual_1
-    assert expected_2 == actual_2
+    actual = rat.do_search_corpse('search', 'rat', player)
+    expected = True
+    assert expected == actual
     
 
 def test_hit(capsys):

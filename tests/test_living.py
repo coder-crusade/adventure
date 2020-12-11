@@ -17,11 +17,10 @@ def test_heal():
   obj.heal(100)
   assert obj.health == 10
 
-@pytest.mark.skip
 def test_is_alive():
   obj = Living()
   obj.hit(13)
-  assert obj.is_alive() == False
+  assert obj.is_alive == False
 
 
   
