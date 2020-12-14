@@ -1,3 +1,6 @@
+# To begin game, call the brain.py module from the command line.
+- `python adventure/brain/brain.py`
+
 # [Text-Based Wireframe](https://docs.google.com/document/d/1LKfCth50D_ZHGRhX65oYNPrHe_puC8IV2xHlsAom86A/edit)
 - provides an abstract view of how the objects within the game can interact with each other. 
 
